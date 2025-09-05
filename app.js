@@ -31,10 +31,12 @@ boxes.forEach((box) => {
         if(turn0){
             ///player0
             box.innerText = "0";
+            box.classList.add("zero");
             turn0 = false;
         } else {
             //playerx
             box.innerText = "X";
+            box.classList.add("cross");
             turn0 = true;
         }
         box.disabled = true;
@@ -52,16 +54,23 @@ const enableBoxes=()=>{
     for(let box of boxes){{
         box.disabled=false;
         box.innerText="";
+        box.classList.remove("zero", "cross");
     }}
 };
 
 const showWiner = (winner)=>{
-    msg.innerText = `Congratulations, Winner is ${winner}`;
+     if (winner === "None") {
+        msg.innerText = "It's a Draw!";
+    } else {
+        msg.innerText = `Congratulations, Winner is ${winner}`;
+    }
+  
     msgContainer.classList.remove("hide");
     disableBoxes();
 }
 
 const checkWinner = () =>{
+     let winnerFound = false;
     for (let pattern of winPatterns) {
 
         let pos1Val = boxes[pattern[0]].innerText;
@@ -73,6 +82,13 @@ const checkWinner = () =>{
             showWiner(pos1Val);
             }
         }     
+    }
+     // Check draw
+    if(!winnerFound){
+        let allFilled = Array.from(boxes).every(box => box.innerText !== "");
+        if(allFilled){
+            showWiner("None");
+        }
     }
 };
 
